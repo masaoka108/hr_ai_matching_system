@@ -1,0 +1,107 @@
+基本設計書: フリーランスエージェント向け人材・案件マッチングシステム
+
+1. システム構成:
+  - Webアプリケーション（SPA構成）
+  - バックエンドAPIサーバ
+  - データベース
+  - LLM連携（OpenAI API）
+  - 管理用バッチ・ジョブ
+
+2. 推奨技術スタック:
+  フロントエンド:
+    - フレームワーク: React.js（Next.js推奨、SSR/SSG対応）
+    - UIライブラリ: MUI（Material-UI）または Chakra UI
+    - 言語: TypeScript
+    - 状態管理: Redux Toolkit または Recoil
+    - 認証: Auth0, Firebase Auth, または独自JWT
+    - テスト: Jest, React Testing Library
+
+  バックエンド:
+    - フレームワーク: Next.js（API Routes活用）
+    - 言語: TypeScript
+    - API: RESTful（API Routesで実装、必要に応じてGraphQLも検討）
+    - 認証: NextAuth.js またはJWT
+    - LLM連携: OpenAI API（openai npmパッケージ）
+
+  データベース:
+    - BaaS: Supabase（PostgreSQLベース、Next.js公式SDK対応）
+    - ORマッパー: Supabase公式クライアント（@supabase/supabase-js）
+
+  インフラ:
+    - クラウド: AWS（EC2, RDS, S3, Lambda等）または GCP, Azure
+    - CI/CD: GitHub Actions, AWS CodePipeline等
+    - コンテナ: Docker
+    - IaC: Terraform または AWS CloudFormation
+
+  その他:
+    - バッチ処理: Celery（Python）または BullMQ（Node.js）
+    - モニタリング: Datadog, Sentry, CloudWatch
+    - バックアップ: DB自動スナップショット
+
+3. 機能設計:
+  人材管理:
+    - 人材情報CRUD（登録・編集・削除・検索）
+    - スキルセット・経歴・希望条件の詳細管理
+    - ファイル添付（履歴書等、S3等ストレージ利用）
+
+  案件管理:
+    - 案件情報CRUD
+    - 必要スキル・業務内容・報酬等の詳細管理
+    - クライアント企業情報管理
+
+  マッチング機能:
+    - 自動マッチング（スキル・経験・希望条件等でスコア算出）
+    - LLM（OpenAI）による自然言語マッチング補助
+    - マッチ度スコア表示・手動調整
+    - マッチング結果の一覧・絞り込み・ソート
+
+  通知・連絡:
+    - マッチング結果の社内通知（メール/Slack等連携）
+    - 新規登録・更新時のアラート
+
+  レポート・分析:
+    - マッチング実績集計・CSV出力
+    - KPI（成約率、案件充足率等）ダッシュボード
+
+  権限管理:
+    - ロールベースアクセス制御（RBAC）
+    - 管理者/担当者の権限分離
+
+4. データ設計（主要テーブル例）:
+  users:
+    - id, name, email, role, password_hash, created_at, updated_at
+  talents:
+    - id, name, contact, skills, experience_years, desired_rate, work_style, available_from, notes, resume_url, created_at, updated_at
+  projects:
+    - id, name, client_company, required_skills, description, location, reward, start_date, notes, created_at, updated_at
+  matches:
+    - id, talent_id, project_id, match_score, status, created_at, updated_at
+
+5. LLM活用設計:
+  - マッチング補助: 人材スキルと案件要件の自然言語比較・スコアリング
+  - 推薦理由の自動生成
+  - 案件・人材情報の要約生成
+
+6. セキュリティ設計:
+  - 通信: HTTPS必須
+  - 認証: JWTベース
+  - 権限: RBAC
+  - データ: 個人情報暗号化、アクセスログ記録
+  - バックアップ: 定期自動バックアップ
+  - 機密情報管理: APIキーやシークレットはNext.jsのサーバー側でのみ利用し、クライアントには絶対に渡さない。環境変数（.env.localやVercel/AWSの管理画面）で安全に管理する
+
+7. 非機能要件:
+  - パフォーマンス: 1万件規模の人材・案件DBでも1秒以内の検索・マッチング
+  - 拡張性: 新規機能追加や外部API連携に柔軟に対応
+  - 可用性: 99.9%以上
+  - モバイル対応: レスポンシブデザイン
+
+8. 将来的な拡張案:
+  - AIによるマッチング精度向上（独自学習モデルの導入）
+  - 外部求人媒体・SNS連携
+  - エージェント・クライアント間チャット機能
+  - 多言語対応
+
+9. 備考:
+  - 開発はアジャイル方式推奨
+  - ドキュメントはNotionやConfluence等で一元管理
