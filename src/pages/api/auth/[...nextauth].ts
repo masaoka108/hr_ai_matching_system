@@ -11,15 +11,22 @@ export default NextAuth({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
+        console.log('認証リクエスト:', credentials);
         const { email, password } = credentials!;
         const { data: { user }, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error || !user) return null;
+        if (error || !user) {
+          console.log('Supabase認証エラー:', error);
+          return null;
+        }
         const { data, error: userError } = await supabase
           .from('users')
           .select('id, name, email, role')
           .eq('id', user.id)
           .single();
-        if (userError || !data) return null;
+        if (userError || !data) {
+          console.log('ユーザーデータ取得エラー:', userError);
+          return null;
+        }
         return data;
       }
     })

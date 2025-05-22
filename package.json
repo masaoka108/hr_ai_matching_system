@@ -1,0 +1,28 @@
+{
+  "name": "hr_ai_matching_system",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "13.4.19",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "@mui/material": "5.14.11",
+    "@emotion/react": "11.11.1",
+    "@emotion/styled": "11.11.0",
+    "next-auth": "4.24.5",
+    "@supabase/supabase-js": "2.39.7",
+    "@reduxjs/toolkit": "^1.9.5",
+    "react-redux": "^8.1.2"
+  },
+  "devDependencies": {
+    "typescript": "5.3.3",
+    "@types/react": "18.2.37",
+    "@types/node": "20.11.30"
+  }
+} 
