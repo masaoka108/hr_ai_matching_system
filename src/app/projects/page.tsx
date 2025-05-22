@@ -1,4 +1,4 @@
-import ProjectListScreen from '@/components/screens/ProjectListScreen';
+import ProjectListScreen from '../../components/screens/ProjectListScreen';
 
 export default function ProjectListPage() {
   return <ProjectListScreen />;

@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { Box, Button, TextField, Typography, Link, Paper, Stack, Alert } from '@mui/material';
-import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { supabase } from '../../lib/supabaseClient';
 
 const LoginScreen: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -12,15 +12,14 @@ const LoginScreen: React.FC = () => {
 
   const handleLogin = async () => {
     setError('');
-    const res = await signIn('credentials', {
-      redirect: false,
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
-    if (res?.ok) {
-      router.push('/dashboard');
-    } else {
+    if (error) {
       setError('ログインに失敗しました。メールアドレスまたはパスワードを確認してください。');
+    } else {
+      router.push('/dashboard');
     }
   };
 

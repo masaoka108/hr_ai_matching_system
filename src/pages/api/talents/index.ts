@@ -1,10 +1,11 @@
 import { supabase } from '../../../lib/supabaseClient';
-import { getServerSession } from "next-auth/next";
-import authOptions from "../auth/[...nextauth]";
 
 export default async function handler(req, res) {
-  const session = await getServerSession(req, res, authOptions);
-  if (!session) return res.status(401).json({ error: "Unauthorized", code: 401 });
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ error: 'Unauthorized', code: 401 });
+  const token = authHeader.split(' ')[1];
+  const { data: { user }, error } = await supabase.auth.getUser(token);
+  if (error || !user) return res.status(401).json({ error: 'Unauthorized', code: 401 });
 
   if (req.method === "GET") {
     // クエリパラメータ取得
@@ -24,10 +25,7 @@ export default async function handler(req, res) {
     let query = supabase.from('talents').select('*', { count: 'exact' });
 
     // agentは自分の権限範囲のみ、adminは全件
-    if (session.user.role !== 'admin') {
-      // agentの権限制御（例：自分が登録したtalentsのみ取得したい場合はここで条件追加）
-      // 例: query = query.eq('created_by', session.user.id);
-    }
+    // 例: if (user.role !== 'admin') query = query.eq('created_by', user.id);
 
     // 絞り込み
     if (name) query = query.ilike('name', `%${name}%`);
@@ -51,9 +49,9 @@ export default async function handler(req, res) {
     // 必須項目バリデーション
     const { name, contact, skills, experience_years, desired_rate, work_style, available_from, notes, resume_url } = req.body;
     if (!name) return res.status(400).json({ error: 'name is required', code: 400 });
-    // agentの場合はcreated_byなどにsession.user.idを入れることも可能
+    // agentの場合はcreated_byなどにuser.idを入れることも可能
     const insertObj = { name, contact, skills, experience_years, desired_rate, work_style, available_from, notes, resume_url };
-    // 例: if (session.user.role !== 'admin') insertObj.created_by = session.user.id;
+    // 例: if (user.role !== 'admin') insertObj.created_by = user.id;
     const { data, error } = await supabase
       .from('talents')
       .insert([insertObj])

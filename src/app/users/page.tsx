@@ -1,5 +1,5 @@
-import UserListScreen from '@/components/screens/UserListScreen';
+import UserListScreen from '../../components/screens/UserListScreen';
 
-export default function UserListPage() {
+export default function UsersPage() {
   return <UserListScreen />;
 } 

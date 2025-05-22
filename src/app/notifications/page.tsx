@@ -1,5 +1,5 @@
-import NotificationScreen from '@/components/screens/NotificationScreen';
+import NotificationScreen from '../../components/screens/NotificationScreen';
 
-export default function NotificationPage() {
+export default function NotificationsPage() {
   return <NotificationScreen />;
 } 

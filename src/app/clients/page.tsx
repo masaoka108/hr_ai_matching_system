@@ -1,5 +1,5 @@
-import ClientListScreen from '@/components/screens/ClientListScreen';
+import ClientListScreen from '../../components/screens/ClientListScreen';
 
-export default function ClientListPage() {
+export default function ClientsPage() {
   return <ClientListScreen />;
 } 

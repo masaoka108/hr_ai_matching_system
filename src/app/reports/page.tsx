@@ -1,5 +1,5 @@
-import ReportScreen from '@/components/screens/ReportScreen';
+import ReportScreen from '../../components/screens/ReportScreen';
 
-export default function ReportPage() {
+export default function ReportsPage() {
   return <ReportScreen />;
 } 

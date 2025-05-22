@@ -1,5 +1,5 @@
-import MatchListScreen from '@/components/screens/MatchListScreen';
+import MatchListScreen from '../../components/screens/MatchListScreen';
 
-export default function MatchListPage() {
+export default function MatchesPage() {
   return <MatchListScreen />;
 } 
